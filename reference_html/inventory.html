@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PharmaCare - Medicine Inventory</title>
+    <link rel="icon" type="image/svg+xml" href="logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <!-- Top Bar Navigation -->
+    <header class="top-bar">
+        <a href="index.html" class="logo-container" aria-label="PharmaCare Home">
+            <img src="logo.svg" alt="PharmaCare Logo" class="logo-img">
+            <span class="logo-text">Pharma<span class="highlight">Care</span></span>
+        </a>
+        <nav aria-label="Main Navigation">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="inventory.html" class="active">Inventory</a></li>
+                <li><a href="expiry.html">Expiry</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <section class="inventory-page">
+            <h2 class="page-title">Medicine Inventory</h2>
+            <p class="page-subtitle">Track, filter, and manage pharmaceutical stocks, pricing, batches, and safety thresholds in real time.</p>
+
+            <!-- Comprehensive Control Bar & Filters -->
+            <div class="inventory-controls-panel">
+                <div class="controls-top-row">
+                    <!-- Search Input -->
+                    <div class="search-wrapper">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="inventory-search-input" class="search-input" placeholder="Search by medicine name, ID, category, or supplier..." aria-label="Search medicines">
+                        <button type="button" id="search-clear-btn" class="search-clear" aria-label="Clear search">&times;</button>
+                    </div>
+
+                    <!-- Toolbar Actions -->
+                    <div class="toolbar-actions">
+                        <button type="button" id="btn-add-medicine" class="btn btn-primary">
+                            <span>&plus;</span> Add New Medicine
+                        </button>
+                        <button type="button" id="btn-reset-inventory" class="btn btn-secondary" title="Restore default dataset">
+                            Reset Demo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Secondary Filters & Sort Row -->
+                <div class="filters-row">
+                    <div class="filter-group">
+                        <label for="filter-category" class="filter-label">Category:</label>
+                        <select id="filter-category" class="filter-select">
+                            <option value="all">All Categories</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filter-stock-status" class="filter-label">Stock Status:</label>
+                        <select id="filter-stock-status" class="filter-select">
+                            <option value="all">All Stock Levels</option>
+                            <option value="in-stock">In Stock</option>
+                            <option value="low-stock">Low Stock (At/Below Min)</option>
+                            <option value="out-stock">Out of Stock (0 units)</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filter-expiry-status" class="filter-label">Expiry Status:</label>
+                        <select id="filter-expiry-status" class="filter-select">
+                            <option value="all">All Expiries</option>
+                            <option value="valid">Valid / Safe</option>
+                            <option value="expiring-soon">Expiring Soon (Next 90 Days)</option>
+                            <option value="expired">Expired</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="filter-sort-by" class="filter-label">Sort By:</label>
+                        <select id="filter-sort-by" class="filter-select">
+                            <option value="name:asc">Name (A &rarr; Z)</option>
+                            <option value="name:desc">Name (Z &rarr; A)</option>
+                            <option value="quantity:asc">Quantity (Lowest First)</option>
+                            <option value="quantity:desc">Quantity (Highest First)</option>
+                            <option value="price:asc">Price (Lowest First)</option>
+                            <option value="price:desc">Price (Highest First)</option>
+                            <option value="expiry:asc">Expiry (Earliest First)</option>
+                            <option value="expiry:desc">Expiry (Latest First)</option>
+                        </select>
+                    </div>
+
+                    <button type="button" id="btn-clear-filters" class="btn btn-sm btn-secondary" title="Clear all active filters">
+                        Clear Filters
+                    </button>
+
+                    <!-- View Mode Switcher -->
+                    <div class="view-mode-toggle" role="group" aria-label="View Mode">
+                        <button type="button" id="btn-view-grid" class="btn-view-toggle active" title="Cards Grid View">⊞ Cards</button>
+                        <button type="button" id="btn-view-table" class="btn-view-toggle" title="Dense Table View">≡ Table</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Summary Bar -->
+            <div class="inventory-results-bar">
+                <span id="inventory-results-count">Loading inventory...</span>
+            </div>
+
+            <!-- View 1: Card Grid View -->
+            <div id="inventory-grid-container" class="items-grid">
+                <!-- Dynamically populated by App.js -->
+            </div>
+
+            <!-- View 2: High Density Data Table View -->
+            <div id="inventory-table-container" class="table-container" style="display: none;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Medicine & Supplier</th>
+                            <th>Category</th>
+                            <th>Stock Level</th>
+                            <th>Unit Price</th>
+                            <th>Expiry Schedule</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Dynamically populated by App.js -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty State Container -->
+            <div id="inventory-empty-state" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">🔍</div>
+                <h3>No medicines matched your criteria</h3>
+                <p>Try refining your search keyword, adjusting status filters, or clear all filters to see all available inventory items.</p>
+                <button type="button" class="btn btn-primary" onclick="PharmaApp.resetFilters()">Reset All Filters</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal 1: Add / Edit Medicine -->
+    <div id="medicine-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="medicine-modal-title" class="modal-title">Add New Medicine</h3>
+                    <button type="button" class="modal-close-btn" data-modal-close aria-label="Close dialog">&times;</button>
+                </div>
+                <form id="medicine-form">
+                    <input type="hidden" id="medicine-mode" value="add">
+                    <input type="hidden" id="medicine-id" value="">
+
+                    <div class="modal-body">
+                        <div class="form-grid">
+                            <div class="form-group col-full">
+                                <label for="medicine-name" class="form-label">Medicine Name <span class="required">*</span></label>
+                                <input type="text" id="medicine-name" class="form-input" placeholder="e.g. Amoxicillin 500mg Capsules" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medicine-category" class="form-label">Category <span class="required">*</span></label>
+                                <input type="text" id="medicine-category" class="form-input" list="category-datalist" placeholder="e.g. Antibiotic" required>
+                                <datalist id="category-datalist">
+                                    <option value="Analgesic">
+                                    <option value="Antibiotic">
+                                    <option value="Antacid">
+                                    <option value="Antihistamine">
+                                    <option value="Dermatology">
+                                    <option value="Diabetes">
+                                    <option value="Gastric">
+                                    <option value="Hydration">
+                                    <option value="NSAID">
+                                    <option value="Pain Relief">
+                                    <option value="Supplement">
+                                </datalist>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medicine-supplier" class="form-label">Manufacturer / Supplier</label>
+                                <input type="text" id="medicine-supplier" class="form-input" placeholder="e.g. GlaxoSmithKline">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medicine-quantity" class="form-label">Current Quantity (Units) <span class="required">*</span></label>
+                                <input type="number" id="medicine-quantity" class="form-input" min="0" step="1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medicine-min-stock" class="form-label">Minimum Stock Alert Threshold <span class="required">*</span></label>
+                                <input type="number" id="medicine-min-stock" class="form-input" min="0" step="1" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medicine-unit-price" class="form-label">Unit Price ($ USD) <span class="required">*</span></label>
+                                <input type="number" id="medicine-unit-price" class="form-input" min="0" step="0.01" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="medicine-expiry-date" class="form-label">Expiry Date <span class="required">*</span></label>
+                                <input type="date" id="medicine-expiry-date" class="form-input" required>
+                            </div>
+
+                            <div class="form-group col-full">
+                                <label for="medicine-image-select" class="form-label">Medicine Photo Asset</label>
+                                <div class="form-img-preview-box">
+                                    <img id="medicine-form-img-preview" src="iimmgg/IMG_20260119_231802.jpg" alt="Preview" class="form-preview-thumb">
+                                    <div style="flex:1;">
+                                        <select id="medicine-image-select" class="form-select">
+                                            <!-- Dynamically populated from available local images -->
+                                        </select>
+                                        <small class="text-muted" style="display:block; margin-top:4px;">Uses verified local product photos stored in project repository.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group col-full">
+                                <label for="medicine-description" class="form-label">Clinical Indications & Notes</label>
+                                <textarea id="medicine-description" class="form-textarea" placeholder="Indications, dosage warnings, or storage requirements..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="btn-save-medicine">Save Medicine</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 2: Quick Stock Adjustment -->
+    <div id="stock-adjust-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="stock-adjust-title" class="modal-title">Adjust Stock Level</h3>
+                    <button type="button" class="modal-close-btn" data-modal-close aria-label="Close dialog">&times;</button>
+                </div>
+                <form id="stock-adjust-form">
+                    <input type="hidden" id="stock-adjust-med-id" value="">
+
+                    <div class="modal-body">
+                        <p style="margin-top:0; font-size:14px; color:var(--text-secondary);">
+                            Current In-Stock Quantity: <strong id="stock-adjust-current-qty" style="color:var(--primary); font-size:16px;">0 units</strong>
+                        </p>
+
+                        <div class="radio-toggle-group">
+                            <label class="radio-card-label">
+                                <input type="radio" name="stock-adjust-type" value="IN" checked>
+                                <span>➕ Stock IN (Restock)</span>
+                            </label>
+                            <label class="radio-card-label">
+                                <input type="radio" name="stock-adjust-type" value="OUT">
+                                <span>➖ Stock OUT (Dispense)</span>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stock-adjust-qty" class="form-label">Units to Adjust <span class="required">*</span></label>
+                            <input type="number" id="stock-adjust-qty" class="form-input" min="1" step="1" required value="5">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stock-adjust-reason" class="form-label">Movement Note / Reason</label>
+                            <input type="text" id="stock-adjust-reason" class="form-input" placeholder="e.g. Regular supplier shipment / prescription order">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+                        <button type="submit" class="btn btn-primary">Apply Stock Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 3: View Full Medicine Details -->
+    <div id="details-modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="details-med-title" class="modal-title">Medicine Details</h3>
+                    <button type="button" class="modal-close-btn" data-modal-close aria-label="Close dialog">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="details-layout">
+                        <div class="details-img-col">
+                            <div class="details-img-box">
+                                <img id="details-med-img" src="" alt="Medicine Photo">
+                            </div>
+                            <div id="details-med-badges" style="display:flex; flex-direction:column; gap:6px; width:100%;">
+                                <!-- Badges -->
+                            </div>
+                        </div>
+
+                        <div class="details-info-col">
+                            <table class="details-info-table">
+                                <tbody>
+                                    <tr>
+                                        <td>Inventory ID:</td>
+                                        <td><strong id="details-med-id" style="font-family:monospace;"></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Therapeutic Category:</td>
+                                        <td id="details-med-category"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Manufacturer / Supplier:</td>
+                                        <td id="details-med-supplier"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Unit Retail Price:</td>
+                                        <td><strong id="details-med-price" style="color:var(--primary);"></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Stock on Hand:</td>
+                                        <td id="details-med-qty"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total SKU Valuation:</td>
+                                        <td><strong id="details-med-valuation"></strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Scheduled Expiry:</td>
+                                        <td id="details-med-expiry"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Expiry Timeline:</td>
+                                        <td id="details-med-days-remaining"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Clinical Description:</td>
+                                        <td id="details-med-description" style="color:var(--text-secondary); line-height:1.4;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="details-action-adjust" class="btn btn-outline-primary">&plusmn; Adjust Stock</button>
+                    <button type="button" id="details-action-edit" class="btn btn-secondary">Edit Medicine</button>
+                    <button type="button" class="btn btn-primary" data-modal-close>Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div>
+                <strong>PharmaCare</strong> &mdash; Professional Pharmacy Inventory Management System
+            </div>
+            <ul class="footer-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="inventory.html">Medicines</a></li>
+                <li><a href="expiry.html">Expiry Monitoring</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

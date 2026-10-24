@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PharmaCare - Expiry Monitoring Center</title>
+    <link rel="icon" type="image/svg+xml" href="logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <!-- Top Bar Navigation -->
+    <header class="top-bar">
+        <a href="index.html" class="logo-container" aria-label="PharmaCare Home">
+            <img src="logo.svg" alt="PharmaCare Logo" class="logo-img">
+            <span class="logo-text">Pharma<span class="highlight">Care</span></span>
+        </a>
+        <nav aria-label="Main Navigation">
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="inventory.html">Inventory</a></li>
+                <li><a href="expiry.html" class="active">Expiry</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <section class="inventory-page">
+            <h2 class="page-title">Expiry Monitoring Center</h2>
+            <p class="page-subtitle">Proactively detect and quarantine expired batches, identify approaching expiration dates, and prevent dispensing compromised medicines.</p>
+
+            <!-- Expiry Metrics Telemetry Row -->
+            <div class="expiry-hero-metrics">
+                <div class="expiry-metric-card">
+                    <div class="metric-icon-box metric-danger">🛑</div>
+                    <div class="metric-data">
+                        <h4>Expired Batches</h4>
+                        <div id="expiry-metric-expired" class="metric-number">--</div>
+                    </div>
+                </div>
+
+                <div class="expiry-metric-card">
+                    <div class="metric-icon-box metric-warning">⏱</div>
+                    <div class="metric-data">
+                        <h4>Expiring Soon (&le;90d)</h4>
+                        <div id="expiry-metric-soon" class="metric-number">--</div>
+                    </div>
+                </div>
+
+                <div class="expiry-metric-card">
+                    <div class="metric-icon-box metric-success">✓</div>
+                    <div class="metric-data">
+                        <h4>Valid & Safe Stock</h4>
+                        <div id="expiry-metric-valid" class="metric-number">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expiry Filter Tabs & Quarantine Actions -->
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px; margin-bottom:10px;">
+                <div class="expiry-tabs-bar" role="tablist">
+                    <button type="button" class="expiry-tab-btn active" data-filter="critical">
+                        Critical Schedule (Expired + Approaching)
+                    </button>
+                    <button type="button" class="expiry-tab-btn" data-filter="expired-only">
+                        Expired Only
+                    </button>
+                    <button type="button" class="expiry-tab-btn" data-filter="soon-only">
+                        Expiring in &le; 90 Days
+                    </button>
+                    <button type="button" class="expiry-tab-btn" data-filter="all">
+                        Complete Expiry Schedule
+                    </button>
+                </div>
+
+                <div class="toolbar-actions" style="margin-bottom: 25px;">
+                    <button type="button" id="btn-quarantine-all-expired" class="btn btn-outline-danger">
+                        <span>🛑</span> Quarantine All Expired Stock
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grid of Monitored Medicine Cards -->
+            <div id="expiry-items-grid" class="items-grid">
+                <!-- Dynamically populated by App.js -->
+            </div>
+
+            <!-- Empty Notice Container -->
+            <div id="expiry-empty-notice" class="empty-state" style="display: none;">
+                <div class="empty-state-icon">🎉</div>
+                <h3>No medicines found in this expiry filter</h3>
+                <p>All monitored medicines meet safety guidelines and are outside the selected risk threshold.</p>
+                <a href="inventory.html" class="btn btn-primary">Return to All Inventory</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div>
+                <strong>PharmaCare</strong> &mdash; Professional Pharmacy Inventory Management System
+            </div>
+            <ul class="footer-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="inventory.html">Medicines</a></li>
+                <li><a href="expiry.html">Expiry Monitoring</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

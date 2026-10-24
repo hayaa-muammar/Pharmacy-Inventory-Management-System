@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PharmaCare - Pharmacy Inventory Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="logo.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="top-bar">
+        <a href="index.html" class="logo-container" aria-label="PharmaCare Home">
+            <img src="logo.svg" alt="PharmaCare Logo" class="logo-img">
+            <span class="logo-text">Pharma<span class="highlight">Care</span></span>
+        </a>
+        <nav aria-label="Main Navigation">
+            <ul>
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="inventory.html">Inventory</a></li>
+                <li><a href="expiry.html">Expiry</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="main-content">
+        <!-- Hero Section -->
+        <div class="hero-strip">
+            <section class="welcome">
+                <h2>Your Health, Our Commitment</h2>
+                <p>Welcome to PharmaCare, where we provide reliable pharmaceutical services with a strong focus on safety, quality, and medicine availability.</p>
+                <div class="hero-actions">
+                    <a href="inventory.html" class="btn btn-primary">Open Inventory Manager</a>
+                    <a href="expiry.html" class="btn btn-secondary">Review Expiry Alerts</a>
+                </div>
+            </section>
+        </div>
+
+        <!-- Dashboard Telemetry Section -->
+        <section class="dashboard" aria-label="Inventory Metrics Dashboard">
+            <div class="dashboard-header">
+                <div>
+                    <h2>Dashboard Overview</h2>
+                    <p class="dashboard-subtitle">Real-time inventory metrics, safety thresholds, and stock valuation</p>
+                </div>
+                <div class="toolbar-actions">
+                    <button type="button" id="btn-reset-demo-data" class="btn btn-sm btn-secondary" title="Restore default demo data">
+                        Restore Demo Data
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dynamic Stat Cards -->
+            <div class="cards">
+                <div class="card card-primary">
+                    <div class="card-header-flex">
+                        <h3>Total Medicines</h3>
+                        <span class="card-icon">💊</span>
+                    </div>
+                    <p id="stat-total-meds">--</p>
+                    <span class="card-subtext">Active pharmaceutical SKUs</span>
+                </div>
+
+                <div class="card card-success">
+                    <div class="card-header-flex">
+                        <h3>Total Inventory Units</h3>
+                        <span class="card-icon">📦</span>
+                    </div>
+                    <p id="stat-total-units">--</p>
+                    <span class="card-subtext">Valuation: <strong id="stat-total-value" style="color:var(--primary); margin-left:4px;">$--</strong></span>
+                </div>
+
+                <div class="card card-danger">
+                    <div class="card-header-flex">
+                        <h3>Out of Stock</h3>
+                        <span class="card-icon">✕</span>
+                    </div>
+                    <p id="stat-out-stock">--</p>
+                    <span class="card-subtext">Requires immediate restock</span>
+                </div>
+
+                <div class="card card-warning">
+                    <div class="card-header-flex">
+                        <h3>Low Stock Alert</h3>
+                        <span class="card-icon">⚠</span>
+                    </div>
+                    <p id="stat-low-stock">--</p>
+                    <span class="card-subtext">Below safety threshold</span>
+                </div>
+
+                <div class="card card-danger">
+                    <div class="card-header-flex">
+                        <h3>Expired Batches</h3>
+                        <span class="card-icon">🛑</span>
+                    </div>
+                    <p id="stat-expired">--</p>
+                    <span class="card-subtext">Quarantine required</span>
+                </div>
+
+                <div class="card card-info">
+                    <div class="card-header-flex">
+                        <h3>Expiring Soon</h3>
+                        <span class="card-icon">⏱</span>
+                    </div>
+                    <p id="stat-expiring-soon">--</p>
+                    <span class="card-subtext">Next 90 days window</span>
+                </div>
+            </div>
+
+            <!-- Dashboard Two Column Telemetry Grid -->
+            <div class="dashboard-grid-two">
+                <!-- Stock Health & Critical Alerts Panel -->
+                <div class="dash-panel">
+                    <div class="dash-panel-header">
+                        <h3 class="dash-panel-title"><span>📊</span> Stock Health Breakdown</h3>
+                    </div>
+                    <div id="stock-health-container">
+                        <!-- Rendered by App.js -->
+                    </div>
+
+                    <div class="dash-panel-header" style="margin-top: 24px;">
+                        <h3 class="dash-panel-title"><span>🚨</span> Priority Alerts</h3>
+                        <a href="inventory.html" class="btn btn-sm btn-outline-primary">View All</a>
+                    </div>
+                    <div id="critical-alerts-list" class="critical-alerts-list">
+                        <!-- Rendered by App.js -->
+                    </div>
+                </div>
+
+                <!-- Recent Transactions Feed Panel -->
+                <div class="dash-panel">
+                    <div class="dash-panel-header">
+                        <h3 class="dash-panel-title"><span>🕒</span> Recent Stock Movements</h3>
+                        <a href="inventory.html" class="btn btn-sm btn-outline-primary">Update Stock</a>
+                    </div>
+                    <div class="table-container" style="border:none; box-shadow:none;">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Medicine</th>
+                                    <th>Action</th>
+                                    <th>Change</th>
+                                    <th>Reason</th>
+                                    <th>Logged</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-activity-tbody">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">Loading stock movements...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div>
+                <strong>PharmaCare</strong> &mdash; Professional Pharmacy Inventory Management System
+            </div>
+            <ul class="footer-links">
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="inventory.html">Medicines</a></li>
+                <li><a href="expiry.html">Expiry Monitoring</a></li>
+            </ul>
+        </div>
+    </footer>
+
+    <!-- Scripts (Ordered for global availability without ES Module CORS issues on file:// protocol) -->
+    <script src="js/data.js"></script>
+    <script src="js/store.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
